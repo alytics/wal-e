@@ -174,6 +174,10 @@ class Backup(object):
         if 'while_offline' in kwargs:
             while_offline = kwargs.pop('while_offline')
 
+        storage_class = self.storage_class
+        if 'storage_class' in kwargs:
+            storage_class = kwargs.pop('storage_class')
+
         try:
             if not while_offline:
                 start_backup_info = PgBackupStatements.run_start_backup()
@@ -236,10 +240,6 @@ class Backup(object):
             # XXX: distinguish sentinels by *PREFIX* not suffix,
             # which makes searching harder. (For the next version
             # bump).
-            if kwargs['storage_class']:
-                storage_class = kwargs['storage_class']
-            else:
-                storage_class = self.storage_class
 
             uri_put_file(self.creds,
                              uploaded_to + '_backup_stop_sentinel.json',
