@@ -285,6 +285,12 @@ def build_parser():
         dest='while_offline',
         action='store_true',
         default=False)
+    backup_push_parser.add_argument(
+        '--storage-class',
+        help=('x-amz-storage-class headers'),
+        dest='storage_class',
+        type=str,
+        default='STANDARD')
 
     # wal-push operator section
     wal_push_parser = subparsers.add_parser(
@@ -649,7 +655,8 @@ def main():
                 args.PG_CLUSTER_DIRECTORY,
                 rate_limit=rate_limit,
                 while_offline=while_offline,
-                pool_size=args.pool_size)
+                pool_size=args.pool_size,
+                storage_class=args.storage_class)
         elif subcommand == 'wal-fetch':
             external_program_check([LZOP_BIN])
             res = backup_cxt.wal_restore(args.WAL_SEGMENT,

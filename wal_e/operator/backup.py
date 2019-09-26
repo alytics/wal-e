@@ -236,12 +236,16 @@ class Backup(object):
             # XXX: distinguish sentinels by *PREFIX* not suffix,
             # which makes searching harder. (For the next version
             # bump).
+            if kwargs['storage_class']:
+                storage_class = kwargs['storage_class']
+            else:
+                storage_class = self.storage_class
 
             uri_put_file(self.creds,
                              uploaded_to + '_backup_stop_sentinel.json',
                              BytesIO(sentinel_content.encode("utf8")),
                              content_type='application/json',
-                             storage_class=self.storage_class)
+                             storage_class=storage_class)
         else:
             # NB: Other exceptions should be raised before this that
             # have more informative results, it is intended that this
