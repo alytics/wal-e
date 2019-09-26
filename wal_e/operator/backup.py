@@ -199,7 +199,7 @@ class Backup(object):
                 version = ctrl_data.pg_version()
 
             ret_tuple = self._upload_pg_cluster_dir(
-                start_backup_info, data_directory, version=version, *args,
+                start_backup_info, data_directory, version=version, storage_class=storage_class, *args,
                 **kwargs)
             spec, uploaded_to, expanded_size_bytes = ret_tuple
             upload_good = True
@@ -435,7 +435,7 @@ class Backup(object):
         return bl
 
     def _upload_pg_cluster_dir(self, start_backup_info, pg_cluster_dir,
-                               version, pool_size, rate_limit=None):
+                               version, pool_size, rate_limit=None, storage_class=None):
         """
         Upload to url_prefix from pg_cluster_dir
 
@@ -489,7 +489,7 @@ class Backup(object):
                     .format(extended_version_url=extended_version_url)))
         uri_put_file(self.creds,
                      extended_version_url, BytesIO(version.encode("utf8")),
-                     content_type='text/plain')
+                     content_type='text/plain', storage_class=storage_class)
 
         logger.info(msg='postgres version metadata upload complete')
 
