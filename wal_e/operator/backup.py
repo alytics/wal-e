@@ -34,6 +34,8 @@ logger = log_help.WalELogger(__name__)
 
 class Backup(object):
 
+    storage_class = 'COLD'
+
     def __init__(self, layout, creds, gpg_key_id):
         self.layout = layout
         self.creds = creds
@@ -238,7 +240,8 @@ class Backup(object):
             uri_put_file(self.creds,
                              uploaded_to + '_backup_stop_sentinel.json',
                              BytesIO(sentinel_content.encode("utf8")),
-                             content_type='application/json')
+                             content_type='application/json',
+                             storage_class=self.storage_class)
         else:
             # NB: Other exceptions should be raised before this that
             # have more informative results, it is intended that this
