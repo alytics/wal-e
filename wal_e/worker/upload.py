@@ -74,12 +74,13 @@ class WalUploader(object):
 
 
 class PartitionUploader(object):
-    def __init__(self, creds, backup_prefix, rate_limit, gpg_key):
+    def __init__(self, creds, backup_prefix, rate_limit, gpg_key, storage_class):
         self.creds = creds
         self.backup_prefix = backup_prefix
         self.rate_limit = rate_limit
         self.gpg_key = gpg_key
         self.blobstore = get_blobstore(storage.StorageLayout(backup_prefix))
+        self.storage_class = storage_class
 
     def __call__(self, tpart):
         """
@@ -137,7 +138,7 @@ class PartitionUploader(object):
             @retry(retry_with_count(log_volume_failures_on_error))
             def put_file_helper():
                 tf.seek(0)
-                return self.blobstore.uri_put_file(self.creds, url, tf)
+                return self.blobstore.uri_put_file(self.creds, url, tf, content_type=None, conn=None, storage_class=self.storage_class)
 
             # Actually do work, retrying if necessary, and timing how long
             # it takes.

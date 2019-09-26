@@ -494,7 +494,7 @@ class Backup(object):
         logger.info(msg='postgres version metadata upload complete')
 
         uploader = PartitionUploader(self.creds, backup_prefix,
-                                     per_process_limit, self.gpg_key_id)
+                                     per_process_limit, self.gpg_key_id, storage_class)
 
         pool = TarUploadPool(uploader, pool_size)
 
